@@ -1,0 +1,31 @@
+class BoutiqueInventory
+  def initialize(items)
+    @items = items
+  end
+
+  def item_names
+    @items.map { |items| items[:name] }.sort
+  end
+
+  def cheap
+    @items.select { |items| items[:price] < 30}
+  end
+
+  def out_of_stock
+   @items.select do |item|
+      item[:quantity_by_size].values.all? { |quantity| quantity == 0 }
+    end
+  end
+
+  def stock_for_item(name)
+    item = @items.find { |item| item[:name]== name}
+    item[:quantity_by_size]
+  end
+
+  def total_stock
+   @items.sum {|item| item[:quantity_by_size].values.sum }
+  end
+
+  private
+  attr_reader :items
+end
